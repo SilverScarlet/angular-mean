@@ -1,0 +1,35 @@
+<div class="container-mt-3">
+    <div class="d-flex justify-content between flex-wrap flex-md-nowarp align-items-center pt-2 pb-2 mb-3 border-bottom">
+        <h1>Books Lists</h1>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">price</th>
+                    <th scope="col">Description</th>
+                    <th class="text-center" scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let book of Books; let i = index">
+                    <td scope="row">{{book.id}}</td>
+                    <td scope="row">{{book.name}}</td>
+                    <td scope="row">{{book.price}}</td>
+                    <td scope="row">{{book.description}}</td>
+                    <th class="text-center">
+                        <button class="btn btn-sm btn-primary" routerLink="/edit-book/{{book.id}}">Edit</button>
+                        <button class="btn btn-sm btn-danger" (click)="delete(book._id,i)">Delete</button>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+
+</div>
+
