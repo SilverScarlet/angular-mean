@@ -1,8 +1,18 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { CrudService } from 'src/app/service/crud.service';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import Swal from 'sweetalert2';
+import {
+  FormGroup,
+  FormBuilder,
+  AbstractControl,
+  Validators,
+} from '@angular/forms';
+
+type SystemTerms = {
+  en: string;
+  [key: string]: string;
+};
+
 @Component({
   selector: 'app-add-book',
   templateUrl: './add-book.component.html',
@@ -10,6 +20,8 @@ import Swal from 'sweetalert2';
 })
 export class AddBookComponent implements OnInit {
   bookForm: FormGroup;
+  submitted = false;
+
   constructor(
     public formBuilder: FormBuilder,
     private router: Router,
@@ -17,23 +29,25 @@ export class AddBookComponent implements OnInit {
     private crudService: CrudService
   ) {
     this.bookForm = this.formBuilder.group({
-      name: [''],
-      price: [''],
-      description: [''],
+      name: ['', [Validators.required]],
+      price: ['', [Validators.required]],
+      description: ['', [Validators.required]],
     });
+  }
+
+
+  get f(): { [key: string]: AbstractControl } {
+    return this.bookForm.controls;
   }
 
   ngOnInit(): void {}
 
   onSubmit(): any {
-    this.crudService.AddBook(this.bookForm.value).then(
-      () => {
-   
-          // this.ngZone.run(() => this.router.navigateByUrl('/books-list'));
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
+    this.crudService.AddBook(this.bookForm.value);
+    this.submitted = true;
+
+    if (this.bookForm.invalid) {
+      return;
+    }
   }
 }

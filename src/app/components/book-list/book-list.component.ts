@@ -22,6 +22,7 @@ export class BookListComponent implements OnInit {
   delete(id: any, i: any) {
 
       this.crudService.deleteBook(id)
+      this.Books.splice(i,1);
     
   }
 }

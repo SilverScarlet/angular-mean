@@ -3,32 +3,60 @@
   <div class="row justify-content center mt-3">
     <div class="col-md-5">
       <form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
-
         <div class="form-group">
           <label for="name">Name</label>
-          <input type="text" class="form-control" formControlName="name" required />
-       
+          <input
+            type="text"
+            class="form-control"
+            formControlName="name"
+            [ngClass]="{ 'is-invalid': submitted && f['name'].errors }"
+            required
+          />
+
+          <span
+            *ngIf="f['name'].invalid && f['name'].touched"
+            style="color: red; float: right"
+            >Required Book name</span
+          >
         </div>
 
-      
+        <br />
         <div class="form-group">
-
           <label for="price">Price</label>
-          <input type="text" class="form-control" formControlName="price" required />
-  
+          <input
+            type="text"
+            class="form-control"
+            formControlName="price"
+            [ngClass]="{ 'is-invalid': submitted && f['price'].errors }"
+            required
+          />
         </div>
+        <span *ngIf="f['price'].invalid && f['price'].touched" style="color: red; float: right"
+          >Required Price</span
+        >
+        <br />
 
         <div class="form-group">
-
           <label for="description">Description</label>
-          <input type="text" class="form-control" formControlName="description" required />
-    
-        </div><br/>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="description"
+            [ngClass]="{ 'is-invalid': submitted && f['description'].errors }"
+            required
+          />
+        </div>
+        <span *ngIf="f['description'].invalid && f['description'].touched " style="color: red; float: right"
+          >Required Description</span
+        >
+        <br />
+        <br />
         <div class="form-group">
-        <button class="btn btn-primary btn-block" type="submit">Add Book</button>
+          <button class="btn btn-primary btn-block" type="submit">
+            Add Book
+          </button>
         </div>
       </form>
     </div>
   </div>
 </div>
-

@@ -1,35 +1,47 @@
 <div class="container mt-3">
-    <h1>Update Data</h1>
-    <div class="row justify-content center mt-3">
-      <div class="col-md-5">
-        <form [formGroup]="updateForm" (ngSubmit)="onUpdate()">
-  
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" class="form-control" formControlName="name" required />
-         
-          </div>
-  
-        
-          <div class="form-group">
-  
-            <label for="price">Price</label>
-            <input type="text" class="form-control" formControlName="price" required />
-    
-          </div>
-  
-          <div class="form-group">
-  
-            <label for="description">Description</label>
-            <input type="text" class="form-control" formControlName="description" required />
-      
-          </div><br/>
-          <div class="form-group">
-          <button class="btn btn-primary btn-block" type="submit">Update Book</button>
-          </div>
-        </form>
-      </div>
+  <h1>Update Data</h1>
+  <div class="row justify-content center mt-3">
+    <div class="col-md-5">
+      <form [formGroup]="updateForm" (ngSubmit)="onUpdate()">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="name"
+            [ngClass]="{ 'is-invalid': submitted}"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="price">Price</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="price"
+            [ngClass]="{ 'is-invalid': submitted}"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="description"
+            [ngClass]="{ 'is-invalid': submitted}"
+            required
+          />
+        </div>
+        <br />
+        <div class="form-group">
+          <button class="btn btn-primary btn-block" type="submit">
+            Update Book
+          </button>
+        </div>
+      </form>
     </div>
   </div>
-  
-  
+</div>

@@ -35,7 +35,7 @@ export class CrudService {
 
   // Add Method
   dataAdd: any = {};
-  async AddBook(data: Book) {
+  AddBook(data: Book) {
     let API_URL = `${this.REST_API}/add-book`;
 
     this.httpClient
@@ -54,10 +54,10 @@ export class CrudService {
         } else {
           Swal.fire('Error !', 'Input field should not empty !', 'error');
         }
-      })          .catch((err) => {
+      })
+      .catch((err) => {
         console.log('add book Error :', err);
       });
-
   }
 
   // Get all objects Method
@@ -141,7 +141,7 @@ export class CrudService {
               this.dataDelete = res;
             });
 
-          window.location.reload();
+          // window.location.reload();
 
           Swal.fire('Deleted!', this.dataDelete.message, 'success');
         }

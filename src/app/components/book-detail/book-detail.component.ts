@@ -1,7 +1,12 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CrudService } from 'src/app/service/crud.service';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  AbstractControl,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-book-detail',
@@ -11,6 +16,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 export class BookDetailComponent implements OnInit {
   updateForm: FormGroup;
   getId: any;
+  submitted = false; 
 
   constructor(
     public formBuilder: FormBuilder,
@@ -30,26 +36,24 @@ export class BookDetailComponent implements OnInit {
     });
 
     this.updateForm = this.formBuilder.group({
-      name: [''],
-      price: [''],
-      description: [''],
+      name: ['', [Validators.required]],
+      price: ['', [Validators.required]],
+      description: ['', [Validators.required]],
     });
   }
 
   ngOnInit(): void {}
 
+  get f(): { [key: string]: AbstractControl } {
+    return this.updateForm.controls;
+  }
+
   onUpdate(): any {
-    this.crudservice.updateBook(this.getId, this.updateForm.value).then(
-      () => {
-
-
-          
-          // this.ngZone.run(() => this.router.navigateByUrl('/books-list'));
-        
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
+    this.crudservice.updateBook(this.getId, this.updateForm.value)
+    this.submitted = true;
+    if (this.updateForm.invalid) {
+      return;
+    }
+    
   }
 }
