@@ -21,9 +21,7 @@ export class BookListComponent implements OnInit {
 
   delete(id: any, i: any) {
 
-      this.crudService.deleteBook(id).subscribe((res) => {
-        this.Books.splice(i, 1);
-      });
+      this.crudService.deleteBook(id)
     
   }
 }

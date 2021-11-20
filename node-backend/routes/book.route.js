@@ -1,25 +1,31 @@
 const express = require('express');
 const app = express();
+const Joi = require('joi');
 
 let Book = require('../model/Book');
 const bookRoute = express.Router();
+
+
+
 // Add Book
 
 
 bookRoute.route('/add-book').post((req, res, next) => {
-    Book.create(req.body, (err) => {
-
-        return next(err);
-    })
+    
+    // const schema = Joi.object().key({
+    //     name: Joi.object
+    // })
 
     if (req.body.name && req.body.price && req.body.description !== "") {
 
-
-        res.json({
-            success: true,
-            message: 'Add book Successfully!'
-        })
-
+        Book.create(req.body,
+            (err) => {
+                res.json({
+                    success: true,
+                    message: 'Add book Successfully!'
+                })
+                // return next(err);
+            })
 
 
     } else {
@@ -31,6 +37,7 @@ bookRoute.route('/add-book').post((req, res, next) => {
 
 
     }
+
 
 
 })
@@ -76,12 +83,12 @@ bookRoute.route('/update-book/:id').put((req, res, next) => {
                 return next(err)
 
             } else {
-                res.json({success:true, message:"Update Book Successfully !"});
+                res.json({ success: true, message: "Update Book Successfully !" });
                 console.log('Book Update Successfully')
             }
         })
-    }else{
-        res.json({success:false, message:"Input field cannot empty !"});
+    } else {
+        res.json({ success: false, message: "Input field cannot empty !" });
     }
 
 })

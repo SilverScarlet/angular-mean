@@ -34,31 +34,30 @@ export class CrudService {
   ) {}
 
   // Add Method
-    dataAdd : any = {};
+  dataAdd: any = {};
   async AddBook(data: Book) {
     let API_URL = `${this.REST_API}/add-book`;
 
     this.httpClient
       .post(API_URL, data)
-      .pipe(catchError(this.handleError)).toPromise().then((res)=>{
-        console.log(res)
+      .pipe(catchError(this.handleError))
+      .toPromise()
+      .then((res) => {
+        console.log(res);
         this.dataAdd = res;
-        if(this.dataAdd.success){
-          Swal.fire('Success !', 'Book have been added !', 'success').then((res)=>{
-
-            this.ngZone.run(() => this.router.navigateByUrl('/books-list'));
-            
-          })
-        }else{
-          Swal.fire('Error !', 'Input field should not empty !', 'error')
+        if (this.dataAdd.success) {
+          Swal.fire('Success !', 'Book have been added !', 'success').then(
+            (res) => {
+              this.ngZone.run(() => this.router.navigateByUrl('/books-list'));
+            }
+          );
+        } else {
+          Swal.fire('Error !', 'Input field should not empty !', 'error');
         }
-      })
+      })          .catch((err) => {
+        console.log('add book Error :', err);
+      });
 
-
-    
-    // return this.httpClient
-    //   .post(API_URL, data)
-    //   .pipe(catchError(this.handleError));
   }
 
   // Get all objects Method
@@ -94,8 +93,7 @@ export class CrudService {
       denyButtonText: `Don't Update`,
     }).then((result) => {
       if (result.isConfirmed) {
-        
-          this.httpClient
+        this.httpClient
           .put(API_URL, data, { headers: this.httpHeaders })
           .toPromise()
           .then((res) => {
@@ -106,30 +104,27 @@ export class CrudService {
               Swal.fire('Saved!', this.dataUpdate.message, 'success');
 
               this.ngZone.run(() => this.router.navigateByUrl('/books-list'));
-
             } else {
               Swal.fire('Cancel!', this.dataUpdate.message, 'error');
             }
+          })
+          .catch((err) => {
+            console.log('update book Error :', err);
           });
       } else if (result.isDenied) {
         Swal.fire('Changes are not saved', '', 'info');
       }
     });
-
-    // return this.httpClient
-    // .put(API_URL, data, { headers: this.httpHeaders })
-    // .pipe(catchError(this.handleError));
-  
   }
 
   // Delete
 
   dataDelete: any = {};
 
-  deleteBook(id: any): Observable<any> {
+  async deleteBook(id: any) {
     let API_URL = `${this.REST_API}/delete-book/${id}`;
 
-    Swal.fire({
+    await Swal.fire({
       title: 'Are you sure?',
       text: 'You Really want to Delete ?',
       icon: 'warning',
@@ -137,21 +132,23 @@ export class CrudService {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.httpClient
-          .delete(API_URL, { headers: this.httpHeaders })
-          .subscribe((res) => {
-            this.dataDelete = res;
-          });
+    })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.httpClient
+            .delete(API_URL, { headers: this.httpHeaders })
+            .subscribe((res) => {
+              this.dataDelete = res;
+            });
 
-        Swal.fire('Deleted!', this.dataDelete.message, 'success');
-      }
-    });
+          window.location.reload();
 
-    return this.httpClient
-      .delete(API_URL, { headers: this.httpHeaders })
-      .pipe(catchError(this.handleError));
+          Swal.fire('Deleted!', this.dataDelete.message, 'success');
+        }
+      })
+      .catch((err) => {
+        console.log('delete book Error :', err);
+      });
   }
 
   //Error
