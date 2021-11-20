@@ -1,12 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
+import { Router } from '@angular/router';
 import { catchError, map } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
+import Swal from 'sweetalert2';
 import {
   HttpClient,
   HttpHeaders,
   HttpErrorResponse,
 } from '@angular/common/http';
-
 
 export class Book {
   _id!: String;
@@ -26,15 +27,38 @@ export class CrudService {
   //HTTO Header
   httpHeaders = new HttpHeaders().set('Content-Type', 'application/json');
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(
+    private httpClient: HttpClient,
+    private ngZone: NgZone,
+    private router: Router
+  ) {}
 
   // Add Method
-  AddBook(data: Book): Observable<any> {
-    console.log("Add Books ...")
+    dataAdd : any = {};
+  async AddBook(data: Book) {
     let API_URL = `${this.REST_API}/add-book`;
-    return this.httpClient
+
+    this.httpClient
       .post(API_URL, data)
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError)).toPromise().then((res)=>{
+        console.log(res)
+        this.dataAdd = res;
+        if(this.dataAdd.success){
+          Swal.fire('Success !', 'Book have been added !', 'success').then((res)=>{
+
+            this.ngZone.run(() => this.router.navigateByUrl('/books-list'));
+            
+          })
+        }else{
+          Swal.fire('Error !', 'Input field should not empty !', 'error')
+        }
+      })
+
+
+    
+    // return this.httpClient
+    //   .post(API_URL, data)
+    //   .pipe(catchError(this.handleError));
   }
 
   // Get all objects Method
@@ -54,17 +78,77 @@ export class CrudService {
     );
   }
 
+  dataUpdate: any = {};
+
   // Update
-  updateBook(id: any, data: any): Observable<any> {
+  async updateBook(id: any, data: any) {
     let API_URL = `${this.REST_API}/update-book/${id}`;
-    return this.httpClient
-      .put(API_URL, data, { headers: this.httpHeaders })
-      .pipe(catchError(this.handleError));
+
+    await Swal.fire({
+      title: data.name,
+      text: 'Do you want to Update ?',
+      icon: 'warning',
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Update',
+      denyButtonText: `Don't Update`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        
+          this.httpClient
+          .put(API_URL, data, { headers: this.httpHeaders })
+          .toPromise()
+          .then((res) => {
+            this.dataUpdate = res;
+            console.log(this.dataUpdate);
+
+            if (this.dataUpdate.success) {
+              Swal.fire('Saved!', this.dataUpdate.message, 'success');
+
+              this.ngZone.run(() => this.router.navigateByUrl('/books-list'));
+
+            } else {
+              Swal.fire('Cancel!', this.dataUpdate.message, 'error');
+            }
+          });
+      } else if (result.isDenied) {
+        Swal.fire('Changes are not saved', '', 'info');
+      }
+    });
+
+    // return this.httpClient
+    // .put(API_URL, data, { headers: this.httpHeaders })
+    // .pipe(catchError(this.handleError));
+  
   }
 
   // Delete
+
+  dataDelete: any = {};
+
   deleteBook(id: any): Observable<any> {
     let API_URL = `${this.REST_API}/delete-book/${id}`;
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You Really want to Delete ?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.httpClient
+          .delete(API_URL, { headers: this.httpHeaders })
+          .subscribe((res) => {
+            this.dataDelete = res;
+          });
+
+        Swal.fire('Deleted!', this.dataDelete.message, 'success');
+      }
+    });
+
     return this.httpClient
       .delete(API_URL, { headers: this.httpHeaders })
       .pipe(catchError(this.handleError));

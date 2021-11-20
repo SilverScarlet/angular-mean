@@ -59,7 +59,7 @@ app.use((req, res, next) => {
 
 // error handler
 app.use((err, req, res, next) => {
-    console.error(err.message);
+    console.error("Error :",err.message);
     if (!err.statusCode) err.statusCode = 500;
     res.status(err.statusCode).send(err.message);
 })

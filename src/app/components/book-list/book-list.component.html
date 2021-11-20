@@ -3,7 +3,7 @@
         <h1>Books Lists</h1>
     </div>
 
-    <div class="table-responsive">
+    <div class="table-responsive container">
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -16,13 +16,13 @@
             </thead>
             <tbody>
                 <tr *ngFor="let book of Books; let i = index">
-                    <td scope="row">{{book.id}}</td>
+                    <th scope="row">{{book._id}}</th>
                     <td scope="row">{{book.name}}</td>
                     <td scope="row">{{book.price}}</td>
                     <td scope="row">{{book.description}}</td>
                     <th class="text-center">
-                        <button class="btn btn-sm btn-primary" routerLink="/edit-book/{{book.id}}">Edit</button>
-                        <button class="btn btn-sm btn-danger" (click)="delete(book._id,i)">Delete</button>
+                        <button class="btn btn-sm btn-primary" routerLink="/edit-book/{{book._id}}">Edit</button>
+                        <button class="btn btn-sm btn-danger" (click)="delete(book._id,1)">Delete</button>
                     </th>
                 </tr>
             </tbody>

@@ -7,8 +7,8 @@ import { AddBookComponent } from './components/add-book/add-book.component';
 import { BookDetailComponent } from './components/book-detail/book-detail.component';
 import { BookListComponent } from './components/book-list/book-list.component';
 
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -16,7 +16,7 @@ import {HttpClientModule} from '@angular/common/http';
     AppComponent,
     AddBookComponent,
     BookDetailComponent,
-    BookListComponent
+    BookListComponent,
   ],
   imports: [
     BrowserModule,
@@ -25,7 +25,8 @@ import {HttpClientModule} from '@angular/common/http';
     ReactiveFormsModule,
     HttpClientModule,
   ],
+  
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
